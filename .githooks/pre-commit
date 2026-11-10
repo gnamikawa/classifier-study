@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v treefmt >/dev/null 2>&1; then
+  exec treefmt --ci
+fi
+
+if command -v nix >/dev/null 2>&1; then
+  exec nix fmt -- --ci
+fi
+
+echo "pre-commit: neither 'treefmt' nor 'nix' is on PATH." >&2
+echo "Enter the devShell (nix develop) and retry." >&2
+exit 1

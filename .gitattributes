@@ -1,0 +1,29 @@
+# Normalize all text to LF in the repo; check out as LF everywhere.
+* text=auto eol=lf
+
+# Shell scripts and hooks are always LF (CRLF breaks the shebang).
+*.sh        text eol=lf
+.githooks/* text eol=lf
+
+# Common source formats — explicit, so Git never guesses wrong.
+*.nix   text
+*.md    text
+*.json  text
+*.toml  text
+*.yaml  text
+*.yml   text
+
+# Lockfiles: text, but noisy in diffs and review.
+flake.lock  text -diff linguist-generated
+*.lock      text -diff linguist-generated
+
+# Binaries — no line-ending conversion, no textual diff.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary

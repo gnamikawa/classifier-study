@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+msg_file="$1"
+subject="$(head -n1 "$msg_file")"
+
+case "$subject" in
+  "Merge "* | "Revert "* | "fixup!"* | "squash!"* | "amend!"*) exit 0 ;;
+esac
+
+types='feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert'
+pattern="^($types)(\([a-z0-9._/-]+\))?!?: .+"
+
+if ! [[ "$subject" =~ $pattern ]]; then
+  cat >&2 <<EOF
+commit-msg: subject does not follow Conventional Commits.
+  got:  $subject
+  need: <type>(<scope>)?: <summary>
+  type: one of $types
+  see:  https://www.conventionalcommits.org/
+EOF
+  exit 1
+fi
+
+if (( ${#subject} > 72 )); then
+  echo "commit-msg: subject is ${#subject} chars; keep it <=72." >&2
+  exit 1
+fi
